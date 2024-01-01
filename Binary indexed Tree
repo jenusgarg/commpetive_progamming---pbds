@@ -1,0 +1,32 @@
+struct FenwickTree {
+    vector<ll> Fen;
+    ll n;
+    FenwickTree(ll n) : n(n) {
+        Fen.resize(n + 1, 0);
+    }
+    
+    ll ReadFen(ll idx) {
+        ll sum = 0;
+        while (idx > 0) {
+            sum += Fen[idx];
+            idx -= (idx & -idx);
+        }
+        return sum;
+    }
+ 
+    void ChangeFen(ll idx, ll val) {
+        
+        while (idx <= n) {
+            Fen[idx] += val;
+            idx += (idx & -idx);
+        }
+    }
+ 
+    ll findSum(ll l, ll r) {
+        
+        return ReadFen(r) - ReadFen(l - 1);
+    }
+ 
+    
+};
+
