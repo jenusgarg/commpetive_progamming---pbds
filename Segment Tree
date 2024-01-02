@@ -1,0 +1,58 @@
+struct SegmentTree {
+    vector<ll> seg;
+    ll n;
+    SegmentTree(ll n) : n(n) {
+        seg.resize(4*n + 1, 0);
+    }
+    
+    void BuildSeg(vector<ll>&arr,ll idx ,ll s ,ll e) {
+        if(s>e){
+            return;
+        }
+        if(s==e){
+            seg[idx]=arr[e];
+            return;
+        }
+        ll mid=(s+e)/2;
+        BuildSeg(arr,2*idx,s,mid);
+        BuildSeg(arr,2*idx+1,mid+1,e);
+        ll l = seg[2*idx];
+        ll r = seg[2*idx+1];
+        seg[idx]=l+r;
+        
+    }
+ 
+
+ll query(ll idx,ll s ,ll e ,ll qs ,ll qe) {
+        if(qs>e || qe<s){
+            return 0;
+        }
+        if(s>=qs && qe>=e){
+            return seg[idx];
+        }
+        ll mid=(s+e)/2;
+        ll l=query(2*idx,s,mid,qs,qe);
+        ll r=query(2*idx+1,mid+1,e,qs,qe);
+        
+        return l+r ;
+
+    }
+
+void update(ll idx,ll s ,ll e ,ll index ,ll val) {
+        if(s>index || e<index){
+            return ;
+        }
+        if(s==e){
+            seg[idx]+=val;
+             return;
+        }
+
+        ll mid=(s+e)/2;
+       update(2*idx,s,mid,index,val);
+       update(2*idx+1,mid+1,e,index,val);
+        seg[idx]=seg[2*idx]+seg[2*idx+1];
+        
+
+    }
+};
+
